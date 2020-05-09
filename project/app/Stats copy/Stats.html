@@ -1,0 +1,246 @@
+<div>
+    <div class="page-header">
+        <div class="row">
+            <div class="col-lg-8 col-md-6">
+                <h4 lang="en">Case name: <span style='color:#A80000 ;' id="cName"></span><br>
+                    <small class="hidden-xs hidden-sm" lang="en">Electricity generation, curtailment, unserved demand</small>
+                    <small class="hidden-xs hidden-sm"><i class="ace-icon fa fa-angle-double-right"></i></small>
+                    <small class="hidden-xs hidden-sm" lang="en">by months, weeks, days</small>
+                </h4>
+            </div>
+    
+            <div class="col-lg-1 col-md-2">
+                <div id="dllChunk"></div>
+            </div>
+            <div class="col-lg-1 col-md-2">
+                <div id="ddlYears"></div>
+            </div>
+            <div class="col-lg-1 col-md-2" >
+                <div class="btn btn-default btn-block" id="btnGenerate"><i class="fa fa-database esst" aria-hidden="true"></i>Generate</div>
+            </div>
+        </div>
+    
+    </div>
+    
+    <div id="row">
+        <div class="col-lg-12">
+            <div  id="log" style="display:none">
+            </div>
+        </div>
+    </div>
+    
+    <div id="row">
+        <div class="col-lg-12">
+            <div class="widget-box ">
+                <div class="widget-header widget-header-small">
+                    <h5 class="widget-title green">Electricity generation [GWh]</h5>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="showLog"  class=" tooltip-info"  data-toggle="tooltip" data-placement="top" title="Definiton">
+                            <i class="fa fa-question-circle-o warning" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix"  id="xlsHG"  class="grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Export data to excel">
+                            <i class="ace-icon fa fa-file-excel-o green"></i>
+                        </a>
+                        <a href="#" data-action="mix"  id="pngHG"  class="grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Export chart as png">
+                            <i class="ace-icon fa fa-file-image-o blue"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="stepline" data-chartType="stepline" id-chart="1"  class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="stepline Chart">
+                            <i class="ace-icon fa fa-bar-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="lineChart" data-chartType="lineChart" id-chart="1" class="switchChart green tooltip-info" data-toggle="tooltip" data-placement="top" title="Line Chart">
+                            <i class="ace-icon fa fa-line-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="areaChart" data-chartType="areaChart" id-chart="1" class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Area Chart">
+                            <i class="ace-icon fa fa-area-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="stackedChart" data-chartType="stackedChart" id-chart="1" class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Stacked Column Chart">
+                            <i class="ace-icon fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix"  id="decDown"  class=" decDown grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Decrease decimal places">
+                            <i class="ace-icon fa fa-arrow-circle-o-down orange"></i>
+                        </a>   
+                        <a href="#" data-action="mix"  id="decUp"  class=" decUp grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Increase decimal places">
+                            <i class="ace-icon fa fa-arrow-circle-o-up nest"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="rcHG" class=" tooltip-info" data-toggle="tooltip" data-placement="top" title="Resize columns">
+                            <i class="fa fa-arrows-h nest" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row nopadding">
+                            <div  class="loadermainLink loaderStats" style="display:none">
+                                <div class="loaderLink"></div>
+                            </div>
+                            <div class="col-lg-8 col-md-12">
+                                <div id="chartHG" style="width:100%; height:280px;"></div>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                                <div id="gridHG"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+    
+    
+    <div id="row">
+        <div class="col-lg-12">
+            <div class="widget-box ">
+                <div class="widget-header widget-header-small">
+                    <h5 class="widget-title green">Electricity curtailmetn/underutilization [GWh]</h5>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="showLog"  class=" tooltip-info"  data-toggle="tooltip" data-placement="top" title="Definiton">
+                            <i class="fa fa-question-circle-o warning" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix"  id="xlsCG"  class="grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Export data to excel">
+                            <i class="ace-icon fa fa-file-excel-o green"></i>
+                        </a>
+                        <a href="#" data-action="mix"  id="pngCG"  class="grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Export chart as png">
+                            <i class="ace-icon fa fa-file-image-o blue"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="stepline" data-chartType="stepline" id-chart="2"  class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="stepline Chart">
+                            <i class="ace-icon fa fa-bar-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="lineChart" data-chartType="lineChart" id-chart="2" class="switchChart green tooltip-info" data-toggle="tooltip" data-placement="top" title="Line Chart">
+                            <i class="ace-icon fa fa-line-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="areaChart" data-chartType="areaChart" id-chart="2" class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Area Chart">
+                            <i class="ace-icon fa fa-area-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="stackedChart" data-chartType="stackedChart" id-chart="2" class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Stacked Column Chart">
+                            <i class="ace-icon fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix"  id="decDown"  class=" decDown grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Decrease decimal places">
+                            <i class="ace-icon fa fa-arrow-circle-o-down orange"></i>
+                        </a>   
+                        <a href="#" data-action="mix"  id="decUp"  class="decUp grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Increase decimal places">
+                            <i class="ace-icon fa fa-arrow-circle-o-up nest"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="rcCG" class=" tooltip-info" data-toggle="tooltip" data-placement="top" title="Resize columns">
+                            <i class="fa fa-arrows-h nest" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row nopadding">
+                            <div  class="loadermainLink loaderStats" style="display:none">
+                                <div class="loaderLink"></div>
+                            </div>
+                            <div class="col-lg-8 col-md-12">
+                                <div id="chartCG" style="width:100%; height:280px;"></div>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                                <div id="gridCG"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+    
+    <div id="row">
+        <div class="col-lg-12">
+            <div class="widget-box ">
+                <div class="widget-header widget-header-small">
+                    <h5 class="widget-title green">Unserved demand [GWh]</h5>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="showLog"  class=" tooltip-info"  data-toggle="tooltip" data-placement="top" title="Definiton">
+                            <i class="fa fa-question-circle-o warning" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix"  id="xlsUD"  class="grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Export data to excel">
+                            <i class="ace-icon fa fa-file-excel-o green"></i>
+                        </a>
+                        <a href="#" data-action="mix"  id="pngUD"  class="grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Export chart as png">
+                            <i class="ace-icon fa fa-file-image-o blue"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="stepline" data-chartType="stepline" id-chart="3"  class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Bar Chart">
+                            <i class="ace-icon fa fa-bar-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="lineChart" data-chartType="lineChart" id-chart="3" class="switchChart green tooltip-info" data-toggle="tooltip" data-placement="top" title="Line Chart">
+                            <i class="ace-icon fa fa-line-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="areaChart" data-chartType="areaChart" id-chart="3" class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Area Chart">
+                            <i class="ace-icon fa fa-area-chart"></i>
+                        </a>
+                        <a href="#" data-action="mix" id="stackedChart" data-chartType="stackedChart" id-chart="3" class="switchChart grey tooltip-info" data-toggle="tooltip" data-placement="top" title="Stacked Column Chart">
+                            <i class="ace-icon fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix"  id="decDown"  class=" decDown grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Decrease decimal places">
+                            <i class="ace-icon fa fa-arrow-circle-o-down orange"></i>
+                        </a>   
+                        <a href="#" data-action="mix"  id="decUp"  class=" decUp grey tooltip-info"  data-toggle="tooltip" data-placement="top" title="Increase decimal places">
+                            <i class="ace-icon fa fa-arrow-circle-o-up nest"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="mix" id="rcUD" class=" tooltip-info" data-toggle="tooltip" data-placement="top" title="Resize columns">
+                            <i class="fa fa-arrows-h nest" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main">
+                        <div class="row nopadding">
+                            <div  class="loadermainLink loaderStats" style="display:none">
+                                <div class="loaderLink"></div>
+                            </div>
+                            <div class="col-lg-8 col-md-12">
+                                <div id="chartUD" style="width:100%; height:200px;"></div>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
+                                <div id="gridUD"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+<script src="classes/js/Chart.Class.js" type="text/javascript"></script>
+<script type="text/javascript" src="app/Stats/Stats.js"></script>

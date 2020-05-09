@@ -1,0 +1,37 @@
+{
+  "name": "esst",
+  "version": "2.6.5",
+  "description": "ESST Energy Scenario Simulation Tool",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ./main.js",
+    "package-linux": "electron-packager . ESST --overwrite --platform=linux --arch=x64 --icon=project/css/esst.png --prune=false --out=release-builds",
+    "linux-installer": "electron-installer-debian --src release-builds/ESST-linux-x64/ --arch amd64 --config debian.json",
+    "package-win": "electron-packager . ESST --overwrite --platform=win32  --arch=x64 asar: true --prune=false --icon=project/css/favicon.ico --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"ESST Energy Scenario Simulation Tool\"",
+    "win-installer": "node win32.js",
+    "package-mac": "electron-packager . ESST --overwrite --platform=darwin --arch=x64 asar: true --prune=false --out=release-builds --icon=project/css/esst.icns",
+    "mac-installer": "electron-installer-dmg ./release-builds/esst-darwin-x64/esst.app esst --out=release-builds --overwrite --icon=project/css/esst.icns"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrii-iaea/ESST"
+  },
+  "keywords": [
+    "Electron",
+    "Energy",
+    "php"
+  ],
+  "author": "IAEA",
+  "license": "MIT",
+  "homepage": "https://energy-modelling.azurewebsites.net",
+  "devDependencies": {
+    "electron": "^8.2.5",
+    "electron-installer-dmg": "^3.0.0",
+    "electron-packager": "^14.2.1",
+    "electron-winstaller": "^4.0.0",
+    "gulp-connect-php": "^1.0.3",
+    "gulp-util": "^3.0.8",
+    "jquery": "^3.3.1"
+  },
+  "dependencies": {}
+}

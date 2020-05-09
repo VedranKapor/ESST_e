@@ -1,0 +1,612 @@
+<pre>
+<h3>ESST ver 2.7.0 technical documentation</h3>
+
+Energy Scenarios Simulation Tool, Version 1.0,
+Planning & Economic Studies Section,
+Department of Nuclear Energy,
+International Atomic Energy Agency IAEA,
+December 2013.
+
+ESST (Energy Scenarios Simulation Tool) is a simple analytical tool to prepare quick assessment of future power capacity needs and investment costs, as well as the basic environmental impact (i.e. air emissions).
+Key characteristics
+•	Scenario-based modelling software for energy capacity expansion, GHG mitigation and investment assessment
+•	Simple, flexible, easy to use – intuitive
+•	Low data requirement
+•	Medium to long-term time frame
+•	Multilingual
+•	User friendly interface, dynamic visualization 
+•	In compliance with IRES recommendations
+IT requirements
+•	Cross browser
+•	Cross platform
+•	Standalone
+•	Web/cloud available
+•	In compliance with W3C standard
+Technologies used
+•	XML, JSON file as data storage
+•	PHP ver 5 as server side language (calculations)
+•	Server2go - apache web server
+•	Javascript, jquery, jqx widgets, html5,css3 for rich user experience
+Input Data
+There is a minimum set of data needed for case calculation:
+•	Final energy consumption by sectors of final consumption (for selected time series);
+•	Fuel shares for each consumption sector in time series; and
+•	Transmission and Distribution (T&D) loses in time series.
+Output Data
+The main result of the ESST is the  calculation of:
+•	Future power capacity additions needed to meet the given/projected demand;
+•	Future electricity generation investments (input data on specific investments are required);
+•	Basic environmental impact of the scenario (input data for emission factors are required).
+
+The main technical, environmental and economic data are:
+•	Average lifetime of technology
+•	Capacity factor of technology
+•	Installed power of technology (existing/committed capacity including planned decommissioning)
+•	NOX emission factor [kg/kWh]
+•	SO2 emission factor [kg/kWh]
+•	PM emission factor [t/kWh]
+•	Fuel cost [EUR/GJ]
+•	Investment cost [EUR/kW]
+•	Fixed O&M cost [EUR/kW/yr]
+•	Variable O&M cost [EUR/MWh]
+Esst structure
+ 
+Who should use this model
+•	experts who wish to design policies and demonstrate their benefits to decision makers
+•	trainers who want to build capacity among young analyst who are embarking on the challenge of understanding the complexity of energy systems
+
+
+ESST Development – Phase 2 (hSimulation – hourly simulation)
+In the Phase 1, a complete chain from Final Energy Demand (historical and projected/user defined) to Energy Balance compilation was implemented using a simple accounting framework. 
+Construction of additional power plants (capacity), their generation and related investments and emissions were calculated.
+The main idea for the Phase 2 is to offer additional analysis/insight for power generation part of the energy system. Phase 2 requires additional set of input data – hourly electricity 
+demand pattern and hourly generation patterns of intermittent supply options (i.e. wind and solar power plants). This analysis should give a first-degree insight into the certain operational 
+issues of the power system under high penetration levels of intermittent generators.
+Starting point:
+•	Electricity supply mix calculated in the Phase 1:
+o	For each identified power source known values are generation (calculated from share and capacity factor defined by user) and capacity (calculated from desired generation and capacity factor)
+•	Electricity supply includes import/export option (in this case only value is given, i.e. capacity of interconnection lines is not included into Phase 1– is this a problem for Phase 2? 
+    Should we include it into calculation and ask to be an input parameter?)
+Additional input data:
+•	Hourly demand pattern (can change from year to year?)
+•	Hourly generation patterns for intermittent supply options (aggregated across all power units; can change from year to year?)
+o	For wind
+o	For solar
+o	For hydro – should we consider only seasonality or?
+o	Should we consider other options as potentially intermittent? (Candidates?) Probably NO.
+o	Do we care about voltage level to which these options are connected (to take into account applicable T/D losses)? For the moment NO (although implementation should not be problematic)
+•	Interconnections capacity (in the case import-export options is used)? Interconnection lines capacity factor?
+•	What about the price of electricity for import/export? Do we take this into account? Or we assume simple approach – export as required, import when needed (last option, i.e. not used before 
+    all other options are exhausted).
+•	Do we consider import/export price variations? Maybe for the beginning only fixed/single price?
+Calculation steps:
+•	Assumption is that all available intermittent generation is preferentially dispatched.
+o	In other words generation of wind and solar plants has "right of through".
+o	Which capacity for wind/solar do we use? Shall we take into account FOR and MOR for these two techs?
+o	Do we take care of wind/solar variable costs (important in the case when generation has to be curtailed – which option is curtailed)
+•	Hourly demand pattern is reduced by the total hourly intermittent generation. Resulting hourly demand pattern is used in subsequent steps.
+•	In the cases when hourly value of total intermittent generation is higher than hourly demand, surplus is exported (if export is considered) or curtailed (curtailed generation)
+•	Calculate dispatching order of other units.
+o	Dispatching of the remaining units is decided on total variable costs.
+o	Variable costs are known from input data from Phase 1 and consist of: 1/ Variable operation and maintenance costs and 2/ Fuel costs for technologies that use fossil fuels, biomass, nuclear… 
+o	Variable costs can change from hour to hour? Most probably we take them constant. Changes from year to year are possible.
+o	Import is dispatched as the last option or economically? If economically we need price for import/export (we may take only one price)
+o	Import capacity – taken as full or partial? We need input data on interconnection
+•	Calculate capacity of each option to be dispatched.
+o	Capacity of an electricity supply option is dispatched using full capacity of that option reduced by the MOR and FOR
+•	Calculate energy produced by each remaining option, including import/export
+o	When there is a surplus generation, then energy should be exported if possible and economically competitive
+o	Demand non-served should be calculated when there is not enough energy
+•	Calculate results/statistics
+o	Show dispatching order (for each year of planning)
+o	Total Energy not served (for each year of planning)
+o	Energy not served as % of total consumption (for each year of planning)
+o	Number of hours in which energy was not served (for each year of planning)
+o	Number of hours as % of total annual hours (for each year of planning)
+o	Maximum non-served load (absolute and as percentage)
+o	Share of renewables in total supply (number of hours in which RES are larger than some set values – e.g. 25%, 50%, 75% or 100%)
+o	Calculate hourly power changes of the remaining generation and show them on graph – as absolute and percentage values (relative to total installed power and to the running power) – 
+    here be careful about negative values!!!
+o	System reserve (for each year of planning; this was possible to be calculated before)
+o	Show LDC graph with intermittent, unserved and other generation
+o	Calculate if system is able to cover hourly variations (this is a tricky part)
+	Input data needed for this calculation are: unit size and number of units per each tech; for each technology type – ramp-up and ramp-down rates – e.g. as MW/min;
+	To minimize data input on the user side we may assume some values and derive some estimate (e.g. on units size, ramp-ups/downs…). In the case we assume some values for units size – 
+    how this will propagate through years?
+
+•	Data storage and handling appears to be extensive and demanding (hourly values for input data and results)
+•	Calculations might take lot of time? Shall we run "all" or "partial – on demand"? Shall we save results? How to control the process so that we are sure we are always in correct 
+    update loop (i.e. that we use the latest user inputs and project the right results). 
+
+•	Sequence of screens from Phase 1 to Phase 2
+•	Iterations – how user can improve data/assumptions made in Phase 1? Provide suggestions.
+
+ 
+Algorithms
+Data input
+ 
+Issues:
+•	There is a need to save some results from the first phase calculations (generation, capacities…)
+•	How to make data input easy (copy-paste; import/export)
+•	Option to enter data for each year or only for the first year
+•	We assume that user provides a pattern that does not have to be adjusted to the base/first year. Therefore, we call it hourly demand pattern. This, user provided hourly demand pattern, 
+    is then used to calculate patterns to be used in the model (modelled hourly demand pattern). From the modelled hourly demand patterns we calculate hourly demand values to be used for subsequent calculations
+•	Many results will have to be saved during the phase 2 – e.g. all hourly load and generation patterns. We should be sure that when we change some input the simulation is repeated.
+ 
+Calculation of load factor, peak loads and hourly demand
+ 
+HDP – Hourly Demand Pattern (user input)
+EHDP – Energy contained in hourly demand pattern (calculated value)
+MHDP – Maximum value of Hourly Demand Pattern (searched value from user input)
+LF – Load factor (calculated value)
+NHDP – Normalised Hourly Demand Pattern (calculated value)
+ED – Energy Demand (results of the first phase)
+HD – Hourly Demand (calculated value)
+PMAX – peak load (calculated value)
+h – hour (1…8760)
+y – year (modelled year from the user input)
+ 
+Calculation of resulting hourly demand (deduction of for import/export)
+ 
+PEI – Power needed to import/export at flat rate (MW) (calculated value)
+ImpExp – Net import/export of electricity (GWh) (value from the first phase calculations). This value can be positive (imported energy) or negative (exported energy). Therefore, 
+resulting PEI value can be positive (import) or negative (export)
+RHD – resulting hourly demand (MW) (calculated value). This is demand that has to be covered by generators.
+This algorithm is the same as for generating techs, so maybe we should immediately do it in the same way. I.e. eventually it would be possible to model import/export on hourly basis 
+and to include it into dispatch order.
+ 
+Calculate hourly wind generation
+ 
+CFW1 – capacity factor of wind plant (Phase 1 calculated value)
+CFW2 – capacity factor of wind plant (Phase 2 calculated value – from hourly wind pattern)
+HWP – hourly wind pattern (input data)
+PMAXHWP – Maximal power from the hourly wind pattern (calculated value) (MW)
+NHWP – Normalized hourly wind pattern (calculated value)
+PWI – Installed power of wind plants (results from the phase 1 calculations) (MW)
+HWG – Hourly wind generation (calculated value) (MW)
+Issues:
+•	In this case average capacity factor provided during the phase 1 does not have to match with the capacity factor as calculated from hourly wind pattern (user provided data). 
+    This should be reported to the user after calculation.
+•	Wind installed capacity is calculated in phase 1. Therefore, this capacity should be used to calculate energy generation in the phase 2, but assuming user provided hourly wind pattern. 
+    Alternatively, provided hourly pattern can be adjusted to match previously provided capacity factor, BUT in this case the pattern would be distorted – therefore we use approach 1.
+ 
+Calculate Resulting demand after wind generation
+ 
+RHWG – resulting hourly wind generation (calculated value) (GWh) (i.e. value after dispatching. This value may differ from CFW2 as some wind generation may have been curtailed)
+RCFW – resulting capacity factor for wind (calculated value) (i.e. value after dispatching. This value may differ from CFW2 as some wind generation may have been curtailed)
+RHD_W – resulting hourly demand after wind generation has been deducted (calculated value)
+TRHD_W – temporary variable to save intermediate results of calculation
+ 
+Calculate hourly solar generation
+ 
+CFS1 – capacity factor of solar plant (Phase 1 calculated value)
+CFS2 – capacity factor of solar plant (Phase 2 calculated value – from hourly solar pattern)
+HSP – hourly solar pattern (input data)
+PMAXHSP – Maximal power from the hourly solar pattern (calculated value) (MW)
+NHSP – Normalized hourly solar pattern (calculated value)
+PSI – Installed power of solar plants (results from the phase 1 calculations) (MW)
+HSG – Hourly solar generation (calculated value) (MW)
+Issues:
+•	In this case average capacity factor provided during the phase 1 does not have to match with the capacity factor as calculated from hourly solar pattern (user provided data). This should be 
+    reported to the user after calculation.
+•	Solar installed capacity is calculated in phase 1. Therefore, this capacity should be used to calculate energy generation in the phase 2, but assuming user provided hourly solar pattern. 
+    Alternatively, provided hourly pattern can be adjusted to match previously provided capacity factor, BUT in this case the pattern would be distorted – therefore we use approach 1.
+ 
+Calculate Resulting demand after solar generation
+ 
+RHSG – resulting hourly solar generation (calculated value) (GWh) (i.e. value after dispatching. This value may differ from CFS2 as some solar generation may have been curtailed)
+RCFS – resulting capacity factor for solar (calculated value) (i.e. value after dispatching. This value may differ from CFW2 as some wind generation may have been curtailed)
+RHD_WS – resulting hourly demand after wind generation has been deducted (calculated value)
+TRHD_WS – – temporary variable to save intermediate results of calculation 
+ 
+Calculate hourly hydro generation
+Hydro is assumed to produce at constant power throughout year. Therefore, hourly hydro generation is a flat curve and has only one value equal to the hydro installed capacity (calculated in the phase 1). 
+During dispatching it is possible that hydro will be curtailed. Therefore, hourly values for hydro are also important.
+PHI – installed power of hydro
+HHG – hourly hydro generation
+HHGy = Series (HHGyk)
+HHGyk = PHI
+ 
+Calculate Resulting demand after hydro generation
+ 
+RHHG – resulting hourly hydro generation (calculated value) (GWh) (i.e. value after dispatching. This value may differ from CFH2 as some hydro generation may have been curtailed)
+RCFH – resulting capacity factor for hydro (calculated value) (i.e. value after dispatching. This value may differ from CFH2 as some hydro generation may have been curtailed)
+RHD_WSH – resulting hourly demand after hydro generation has been deducted (calculated value)
+TRHD_WSH – – temporary variable to save intermediate results of calculation 
+ 
+Calculate power derating
+In order to better represent technologies, it would be good to ask for additional data on technologies, like:
+•	Maintenance(MOR) – in days per year
+•	Forced outage rate (FOR) – in %
+•	Contribution to spinning reserve (SR) – % of installed power
+These values will be used to derate power. Data may be collected during the first phase. We may consider/offer default values to user. Derated power is then used to calculate generation.
+For each remaining technology calculate power as:
+DPty = PIty*MORty/365*(1-FORty)*(1-SRty)
+t – technology index
+DPty – derated power for technology “t” in year “y” (calculated value)
+PIty – installed power of technology “t” in year “y” (values from phase 1)
+
+Calculate dispatching order
+Dispatching order is calculated based on the total variable costs (for operation and maintenance and fuel costs). As fuel prices can change from year to year, the dispatching order is established for each year.
+Loading order is assigned to each technology and technologies are sorted from the cheapest to the most expensive. In the case two or more techs have the same total variable costs, 
+technology that was first reached remains in its position.
+l – loading order index
+Issues/options:
+•	Should we allow that user sets the preference in dispatching? E.g. we provide this information, but user may overwrite it
+•	For RES and waste sources – should be include them in the dispatching or leave this to the user?
+    o	Possible issue here is e.g. geothermal, biomass and waste – these should have some preferred dispatching
+•	Dispatching order of RES projects will influence directly curtailment?
+ 
+Results
+
+•	Generation
+•	Curtailed generation should be given, including hourly profile – this is potential export? Value of curtailed generation?
+•	Some statistics on curtailment (hours, power)
+•	
+•	Capacity factor
+•	Capacity factor analysis
+•	Some illustrative graphs
+•	Power change
+•	Demand
+•	Total unserved energy
+•	Value of curtailed demand? (based on marginal costs)
+•	Peak load and system reserve
+All results, especially hourly profiles should be available for download
+
+
+Calculate remaining generation profiles
+The algorithm for this is basically the same across all techs, irrespective the dispatch order.
+Smaller differences can be solved by introducing the same set of parameters for all techs and default values (e.g. not all techs have CF2. Therefore, CF2 can be set to 1 for dispatchable techs; 
+not all techs have “l” dispatching order. So those without dispatching order can be set to some other value or put at the beginning of the loading order). 
+ 
+HtlG – hourly generation of technology “t” with loading order “l”
+ 
+Calculate parameters to evaluate case study results
+•	Evaluate number of power output changes and their magnitude
+•	Evaluate number of production units per technology (by analysing total installed capacity)
+•	E.g. (thresholds may change from one technology to other)
+    o	IF Pins < 2000MW => Assume smaller unit size for coal, natural gas… (around 100-200 MW)
+    o	IF 2000MW < Pins < 10000MW => Assume middle unit size for coal, natural gas… (around 300-600 MW)
+    o	IF Pins > 10000MW => Assume maximum unit size for coal, natural gas… (around 800 MW)
+    o	For nuclear assume around 1000MW or 600MW
+    o	These assumptions should be communicated to user and user should have option to change them
+    o	Number of units and unit sizes my differ from year to year, but we do not take care of what was in the previous year (i.e. calculation is always for a single year, without looking back)
+•	Assume default values for power output change (MW/h) for each set of units
+•	E.g. Ramp-up and Ramp-down rates can be built into the model and reported to the user. It would be possible for user to change these values during data inputs on techs
+•	Calculate for each two consecutive hours if there is a problem for certain technology (taking into account how many units are running in some hour)
+•	Count problematic hours and report analytics
+•	Report these values as graphs and basic analytics
+•	
+
+•	Evaluate number of start-ups of power plants
+•	Count how many times change between two consecutive hours is larger than installed power of a unit
+
+
+<h4>Reserve Capacity (RC)</h4> 
+Reserve capacity is a user value defined in the Phase 1 of ESST. It is defined as percentage of capacity above total needed capacity (calculated from user defined electricity generation mix of Phase 1) to 
+take into account e.g. maintenance needs in the system.
+Term "reserve capacity" is different from term "system reserve" or "reserve margin" (which is calculated as capacity surplus above the system peak load – i.e. it depends also on load characteristics).
+Calculation of overall RC and additional capacity
+Based on the user inputs (electricity generation mix and capacity factors for each tech), software calculates total needed capacity (TNC). Absolute value (in MW) of Reserve Capacity is then calculated from 
+TNC as explained by diagram. 
+After total RC[MW] is known, this overall values has to be distributed/assigned to available technologies (dispatchable only; i.e. thermal units; non-dispatchable or variable generation units should not 
+provide this type of reserve).
+Total RC is distribute among technologies according to the user selection. RC can be constructed from one (minimum; e.g. gas units) or several technologies (e.g. gas, oil…). Total RC value should be 
+distributed among selected techs according to the user defined inputs (i.e. shares).
+Example 1:
+RC = 20% (user input value)
+RCcoal = 40% (user input value)
+RCgas = 60% (user input value)
+TNC = 1000 MW; IChydro = 200 MW; ICcoal = 400; ICoil = 300; ICgas = 100 MW; (calculated values)
+--
+RC = 200 MW
+Techs to be used for RC are coal and gas (as selected by the user).
+RCcoal [MW] = RCcoal [%] * RC [MW] / 100 = 120 MW
+RCgas [MW] = RCgas [%] * RC [MW] / 100 = 80 MW
+
+TIC [MW] = RC + TNC = 200 + 1000 = 1200 MW
+TIChydro = IChydro = 200 MW (variable techs do not contribute to the RC)
+TICcoal = ICcoal + RCcoal = 400 + 120 = 520 MW
+TICoil = ICoil + RCoil = 300 + 0 = 300 MW
+TICgas = ICgas + RCgas = 100 + 80 = 180 MW
+
+<h4>Calculation of maintenance schedule for ESST v.2.0</h4>
+21 February 2017
+
+ 
+Assumptions
+Initial assumptions are:
+•	Maintenance schedule is calculated at monthly level
+•	All technologies have the same duration of the maintenance, i.e. 1 month;
+•	Maintenance class size depends on the total installed power per technology and is assigned/calculated for each year
+Variables
+
+Modified period peak loads (year, period) = MPPL y,p
+y – modelling years; y = 1…N
+N – user defined value
+p – period inside a modelling year; p = 1…P
+P – initially set to 12 (i.e. monthly maintenance)
+p = 1; hours from 1 to 730;
+p = 2; hours from 731 to 1460; and so on.
+Modified period peak loads are calculated as follows:
+-	Hourly demand (modified by import/export values) is reduced for non-dispatchable generation (i.e. for wind, solar and hydro – techs that come with hourly production schedule)
+-	Resulting hourly values are used to find period peak loads (therefore modified, i.e. it is not original demand value, but reduced)
+MPPL y,p = Max (Resulting Hourly Load y,p) (only for hours belonging to each period)
+e.g.
+MPPL 2010,1 = Max (Resulting Hourly Load 2010, 1-730)
+--
+Total Installed Capacity Available (year, period) = TICA y,p
+
+•	Initial values of TICA y,p are set to sum of all total installed capacities of all dispatchable techs at the beginning of each year (i.e. installed capacity of wind, solar and hydro is 
+    not taken into account for this calculation). This calculation takes into account Reserve Capacity values (results of the first phase), but excludes installed power after ENS is adjusted!
+•	Initial TICA value in each year is "flat" or constant for all periods in that year. During calculation TICA value is decreasing in different periods as units of different dispatchable 
+    techs are taken out for maintenance
+•	Dispatchable techs in this case are: nuclear, coal, gas, oil, peat, oil shale, biomass, waste and geothermal (will see if for all those maintenance schedule is needed?)
+•	Import capacity is not taken into account for this calculation! (import and export values are deducted from demand before maintenance schedulling)
+e.g.
+TICA 2010,1	= Sum (Total installed capacity of all dispatchable techs in 2010)
+		= TICA 2010,1 = … = TICA 2010,12
+Later, as calculation progresses, TICA values for particular year will start changing from period to period.
+--
+Maintenance Space (year, period) = MSPACE y,p = TICA y,p – MPPL y,p
+•	Maintenance space is the positive distance/difference between TICA and MPPL
+•	Positive distance indicates that there may be enough capacity to schedule maintenance (if distance is large enough to accommodate maintenance class size)
+•	If distance is negative or not enough to host maintenance in any of years/periods, then it is not possible to schedule maintenance as there is not enough capacity to cover demand
+    o	This case should be reported to user and indicate that total installed capacity should be increased (it is not important for which tech, just overall value is not enough)
+    o	At this point maintenance scheduling can be stopped to allow user to change case study assumptions. Alternatively, procedure could be continued and hourly dispatch results calculated 
+    (large ENS expected)
+--
+Maintenance Duration (tech) = MDURA t
+•	Maintenance duration is defined for each tech and is constant for the whole planning horizon
+•	In the first approximation maintenance duration is set to 1 month
+•	Later maintenance duration will be expressed in terms of weeks
+--
+Maintenance Class Size (year, tech) = MCLASS y,t
+•	Maintenance class size is established for each year and for each technology (i.e. in one year there is only one maintenance class size per tech)
+    o	Maintenance class size can differ between years as more larger units are deployed (assuming demand increase during planning horizon)
+•	Maintenance class size is simplified at this stage and does not use real unit sizes, but an approximation (assuming fixed size of units). At later stages it should be possible to add more flexibility
+•	Based on the maintenance class size, model calculates number of units per each dispatchable technology that has to be scheduled for the maintenance
+•	Number of units per tech will define how many times procedure/iteration (fitting a unit into maintenance space/window) has to be repeated for particular tech in particular year
+•	Maintenance class sizes must be calculated for all techs in particular year and then sorted from the largest to the smallest value to establish the sequence in which techs will be
+     considered for maintenance scheduling (maintenance is not done according to the dispatch order, but new sequence is established in each year).
+Proposal how to establish MCLASS values:
+Unit Size (year, tech) = USIZE y,t
+•	For nuclear
+    o	Default unit size is 1000 MW (for this we need a variable for each tech – later this might change as more details are added, and maybe will be user option/flexibility)
+    o	Total installed capacity (TIC; result of the first phase) of nuclear in a year is checked against unit size by dividing total installed capacity with default unit size (integer division)
+        	If the result is lower than 2 (i.e. TIC is lower than 2000 MW), then MCLASS is equal to TIC (i.e. all capacity must be taken offline for maintenance during one period/month)
+        	If the result ≥2 and ≤12 (i.e. number of maintenance periods in any year), then MCLASS is TIC/Number of units, where number of units is │TIC/1000│+1
+        	If the result is higher than 12, it can be assumed that equal capacity is taken offline for maintenance in each period and MCLASS = TIC/12. This case is equal to a case where available 
+            capacity is calculated as TIC reduced by pre-defined maintenance outage rate. There is no need to go through iterations and decide on the maintenance schedule. Maintenance space will be reduced 
+            in each period for the same amount and procedure can go the next technology. Alternative is that procedure continues as in the case for smaller number of units.
+
+•	For coal
+    o	Default unit size is 400 MW
+    o	Rest of the procedure is similar to nuclear (described above), only some values have to be modified
+•	For gas
+    o	Default unit size is 300 MW
+    o	Rest of the procedure is similar to nuclear (described above), only some values have to be modified
+•	For oil, oil shale and peat
+    o	Default unit size is 200 MW
+    o	Rest of the procedure is similar to nuclear (described above), only some values have to be modified
+•	For Waste, Biomass, Geothermal
+    o	Default unit size is 100 MW
+    o	Rest of the procedure is similar to nuclear (described above), only some values have to be modified
+    o	These are dispatchable, but do we need to do maintenance scheduling?
+--
+Number of units for maintenance (year, tech) = NUNIT y,t
+•	Number of units for maintenance for a tech in each year is calculated from the total installed capacity (including Reserve Capacity, but excluding capacity added due to ENS correction) of 
+    that technology and assumed maintenance class size (see above description of maintenance class size calculation)
+--
+Total Available Capacity (year, hours/periods,tech) = TAC y,h/p,t
+Total available capacity for each tech and each hour of year is the overall result of the maintenance scheduling. These values are used as the starting point for hourly simulation in the second phase.
+
+<h4>Forced Outage Rate (FOR)</h4>
+For thermal power plants (i.e. technologies ), user can provide input data on Forced Outage Rate (FOR), i.e. probability that capacity of a technology will not be available for use due to an unplanned event. 
+FOR value is given as average annual value in percentage. E.g. 5% for coal power plants means that capacity of one power unit might not be available to generate during 5/100 * 8760 hours during a year. 
+In real operation, it is not known when these 5% of hours will occur and how an unplanned event will influence availability of a plant (e.g. all hours in one time window, distributed over several events, 
+units operates at reduced power or its capacity is zero …).
+In hourly simulation, FOR value is used to derate available capacity throughout a year. This is a deterministic approach. At one side it is conservative as it assumes that part of total capacity will not 
+be available throughout all hours during a year. On the other hand it is optimistic as part of capacity is always available (in real operation in most of the cases plant becomes unavailable, therefore 
+its power has to backed up by system reserve).
+FORt [%] – Forced Outage Rate value provided by user (for each thermal power plant technology t). Single FOR value is used for a technology for all years during planning period
+Capacity derating by FOR value is applied after maintenance scheduling is calculated (if user decides to use maintenance). I.e. available capacity for generation is further modified by FOR factor.
+ 
+Derated_Capacityt,y,h = Available_Capacityt,y,h *(1-FORt/100)
+Where:
+t – technology index; y – year index; h – hour index;
+Derated_Capacityt,y – derated capacity for technology “t” in year “y” and hour "h" (calculated value)
+Available_Capacityt,y,h – available capacity of technology “t” in year “y” and hour "h" (values from phase 1 modified by maintenance algorithm) 
+Proposal for data input form is given below.
+Technology	Maintenance Duration	Maintenance unit size	Forced outage rate
+Coal, Oil, Gas, Peat, Oil Share, Waste, Biofuels, Geothermal, Nuclear	Selection between:
+0, 2 and 4 weeks	Typical unit size.
+One value for the whole planning period	Average annual value in percentage (%) for each technology
+Hydro, wind, solar	No maintenance and FOR data needed
+
+
+<h4>LCOE Calculation (technology level)</h4>
+34.	Calculation of LCOE for each technology (fuel group) should be provided:
+a.	LCOE based on user inputs on techs (Phase I)
+b.	LCOE based on real operation (Phase II)
+There is a need to differentiate between LCOE in Phase I (for user provided input data, including expected capacity factor) and Phase II (i.e. after hourly simulation 
+and resulting capacity factor).
+LCOE can change from year to year, in both Phases. In Phase I change can come from changes in assumed specific investment, fuel costs… (and other cost or performance 
+parameters like life time and capacity factor).
+LCOE in Phase I can be provided together with other results (Electricity Supply Planning\Data Analysis\Existing capacity and Investment).
+LCOE should be presented as a table with components and total, and as a graph (suggested color code: Investment – dark blue; FOM – light blue; VOM – orange; Fuel – red; CO2 – gray).
+Methodology to calculate LCOE 
+In order to calculate LCOE additional parameters should be entered:
+•	Discount rate PDISCRATE in %/year (assuming the same value is given for all techs). Discount rate should be entered during Technology data definition 
+(Electricity Supply Planning\Tech Data). Default value is 0 (zero). No negative values allowed.
+LCOE of a technology is calculated as (omitted technology/fuel index) as:
+LCOE [Currency/MWh] = INV_LCOE + FOM_LCOE + VOM_LCOE + FUEL_LCOE + CO2_LCOE
+INV_LCOE	- Investment component of LCOE
+FOM_LCOE	- Fixed cost component of LCOE
+VOM_LCOE	- Variable cost component of LCOE
+FUEL_LCOE	- Fuel cost component of LCOE
+CO2_LCOE	- Cost component related to CO2 cost
+(i.e. there are five components, below calculation breakdown by component)
+Investment component (INV_LCOE)
+It is assumed that investment reimbursement is spread over the life time of a technology. Construction time of a technology is not taken into account, but user is 
+free to provide adjusted investment costs to take into account interest accumulated during construction.
+INV_LCOE [Currency/MWh]	= INV * CRF / GENERATION
+INV [000 Currency]		= SPEC_INV * CAP_INST
+SPEC_INV [Currency/kW]	= Specific investment, user provided value, can change annually
+CAP_INST [MW]		= Installed capacity/power (will not figure in formula at the end)
+CRF (Capital Recovery Factor)	= (i*(1+i)^N)/((1+i)^N-1)
+PDISCRATE 			= i (to make formula shorter)
+N				= LIFE_TIME of a technology (user provided input, can change annually)
+GENERATION [MWh]		= CAP_INST * TIME * CAP_FACTOR
+TIME				= 8760 hours (i.e. one year)
+CAP_FACTOR			= Capacity factor (assumed-data input in Phase I; result in Phase II)
+INV_LCOE [Currency/MWh]	= SPEC_INV [USD/kW] * CRF / (CAP_FACTOR [share] * 8.76)
+Fixed cost component (FOM_LCOE)
+FOM_LCOE [Currency/MWh}	= FOM / Generation
+FOM is total annual fixed operation and maintenance cost
+FOM [000 Currency]		= SPEC_FOM [Currency/kW/year] * CAP_INST [MW]
+SPEC_FOM [Currency/kW/year]	= Specific FOM cost of a technology, provided by user
+FOM_LCOE [Currency/MWh]	= SPEC_FOM [Currency/kW/year] / (CAP_FACTOR [share] * 8.76)
+Variable cost component (VOM_LCOE)
+VOM_LCOE [Currency/MWh]	= SPEC_VOM [Currency/MWh]
+In this case there is no need to do any recalculation, just use specific variable cost as provided by the user for each tech.
+Fuel cost component
+FUEL_LCOE [Currency/MWh]	= FUEL_COST / Generation
+FUEL_COST is total annual fuel cost for a given technology.
+FUEL_COST [Currency]		= FUEL_QUANT [GJ] * FUEL_PRICE [Currency/GJ]
+FUEL_QUANT [GWh]		= Generation [GWh] / ETA [share]
+FUEL_PRICE [Currency/GJ] is user provided input value, can change from year to year.
+ETA [share] is technology efficiency provided by user as input data, can change from year to year. Share means it is a value from 0 to 1 (i.e. not in percentage).
+FUEL_LCOE [Currency/MWh]	= 3.6 * FUEL_PRICE [Currency/GJ] / ETA [share]
+CO2 cost component
+CO2 cost component depends on CO2 prices, the amount of fuel burned, fuel emission factor and sequestration rate (technology dependent). CO2 price is assumed to be 
+provided by user as constant annual value (i.e. it can change from year to year, same value for all techs that produce electricity ). Fuel amount is calculated from generation, 
+fuel emission factors are implemented in the model (IPCC Guidelines 2006), while sequestration rate is assumed to equal 0 (i.e. no sequestration). Sequestration rate is not 
+implemented in the current version of the model.
+CO2_LCOE [Currency/MWh]	= CO2_COST / Generation
+CO2_COST is total annual CO2 cost for a given technology.
+CO2_COST [Currency]		= CO2_QUANT * CO2_PRICE
+CO2_PRICE [Currency/ton of CO2] is user provided value, can change from year to year.
+CO2_QUANT			= FUEL_QUANT * CO2_EF * (1-CO2_SEQ)
+CO2_EF [kg of CO2 per TJ of fuel on net calorific basis] is a specific emission factor implemented in the model, depends on fuel type.
+CO2_LCOE [Currency/MWh]	= CO2_EF [kg/TJ] * CO2_PRICE [Currency/ton] * (3.6/1 000 000) / ETA [share]
+Calculation of CO2 reduction cost
+35.	This is possible to implement in the following ways
+a.	Calculate CO2 reduction costs based on LCOE (not completely clear how?). In this case only estimate per technology/fuel type would be given. I.e. if price of 
+CO2 is X per ton, for each tech it is possible to provide additional cost per produced MWh (LCOE)
+b.	Calculate CO2 reduction costs based on scenario comparison (costs and emissions). This is a more elaborate approach in which two scenarios of the same case are 
+compared. It would be possible to do discounting to the beginning and compare two scenarios. It is possible to provide average CO2 cost for each scenario 
+(i.e. even without comparison)
+For now this options is put on hold.
+
+
+<h4>Energy Storage in ESST</h4>   
+Energy storages are considered in the Phase 2, i.e. for hourly simulation of electricity generation (in the Phase 1 there's no need to consider storage). In ESST it is not specified what type of 
+storage is used and there's only one storage option that should be used to represent all storage technologies in a system. Model does not optimize or calculate size of the storage, i.e. user should provide 
+main storage parameters as described here. Energy storage is operated continuously , i.e. energy stored in one hour can be used in any of subsequent hour(s).
+Storage operation is simplified in the following way:
+-	Injection/Charging of energy into storage
+    o	Storage can be refilled only during hours where there's a surplus energy from hydro, wind or solar  sources (i.e. curtailment of variable renewable energy sources)
+-	Withdrawal/Discharging from energy storage
+    o	Energy from storage can be used only during hours with unserved energy.
+There are several storage parameters required to be provided by the user are:
+•	Storage volume (or storage size – relates to energy content, how much energy can be stored) as profile of available storage across study period (i.e. values can differ from year to year to reflect 
+    potential increased need for storage use as variability in the system increases)
+    o	User should provide annual values for maximum energy/volume (that can be stored at any point of time);
+•	Maximum charge/discharge capacity available for storage operation
+    o	User should provide annual values for maximum charge/discharge capacity (that can be used to charge/discharge storage at any point of time);
+    o	Model assumes that charge and discharge capacity are equal;
+•	Storage losses (as percentage loss relative to stored energy over time)
+    o	Loss of stored energy during time (leakage);
+•	Efficiency or losses of charge/discharge cycle (as percentage of energy transferred to or from storage)
+    o	Energy losses during charging/discharging appear as part of energy is used to operate storage or is lost due to various physical limitations;
+•	Life time of storage
+    o	/// Shall we consider this one, is it needed? – As model will not calculate storage additions, we do not need this one – but check next line on investments
+•	Investment cost (currency per GWh of storage volume)
+    o	For storage, investment is mainly related to storage volume and therefore provided in currency per GWh of storage volume
+    o	Investments into storage can be very large and it will certainly influence overall supply cost, therefore it is important to take it into account. On the other side, we do not calculate additional 
+        capacity, we take storage volume as provided by the user.
+•	Ramping rates
+    o	It is assumed that storage can provide energy at any ramping rate (i.e. this is not considered as operational limit for the time being)
+•	Fixed costs
+    o	If there are any costs for storage (like annual maintenance) these should be given here as amount of money per storage volume and per year (i.e. currency/GWh per year). These costs exists if 
+        storage is installed;
+    o	/// This parameter can be used instead of investment (so we do not have to take into account investment and life time). Still overall supply cost would have to be updated for storage cost
+•	Variable costs
+    o	If there are any cost related to charging/discharging of storage, cost should be given as money per energy charged/discharged (i.e. currency/GWh per energy charged or discharged). 
+        These costs exists if storage is used.
+
+    Table 1. Input data needs for storage modelling and related model variables
+
+Storage parameter	Unit	Note	Parameter/Variable name
+Maximum storage volume (energy)	GWh	Overall amount of energy that can be contained (parameter) or is in storage (variable) at any moment.	Parameter – PSVOL_MAXy (constant value in a given year y). 
+This parameter is given for each year during study period
+
+Variable – VSVOL y,h (amount of energy stored at the end of hour h of year y). /// This value is modified by storage losses
+
+Charging and Discharging capacity (power)	MWh/h (i.e. MW)	Maximum (parameter) or instantaneous (variable) capacity or power at which storage can be charged	
+Parameter – PSCD_MAXy (constant value in a given year y)
+
+Variable – VSCD y,h (capacity at which storage is charged or discharged in hour h of year y)
+
+Storage losses	%/year
+/// Here question is what is appropriate unit for this?	Loss of energy stored compared to previous hour	Parameter – PS_LOSSy (constant value in a given year y)
+
+/// Meaning of this parameter is how much stored energy would be lost if energy put inside and then amount checked one year later
+
+Efficiency of charge/discharge 	%	Efficiency of charge/discharge (one way)	Parameter – PS_EFF (constant throughout study period)
+
+Life time	Years	Life time of storage	Parameter – PS_LIFE (storage life time, constant throughout study period)
+
+/// It is not clear if this parameter is needed as construction of storage is not calculated inside model but provided as input?
+
+Investment cost	Currency/GWh	Investment cost per unit of energy that can be stored	Parameter – PS_INVy for a given year
+
+Investment is given per GWh of energy stored, but should reflect overall battery pack cost (i.e. not just battery itself, but all other elements for charging, discharging and control)
+Fixed costs	Currency/GWh per year	Fixed costs per unit of energy that can be stored and per year	Parameter – PS_FOMy in a given year
+
+/// Added as option (e.g. can be used to model a need to replace storage after certain time without considering life time explicitly or to represent maintenance cost)
+
+Variable costs	Currency/GWh of energy charged or discharged	Variable costs per unit of energy charged od discharged	Parameter – PS_VOMy in a given year
+
+Added as an option (expectation is that these costs are low)
+<h5>Storage operation</h5>
+The main assumptions on storage operation are the following:
+•	There is only one composite storage in a given year
+•	Storage operation is analyzed at annual level, i.e. there's no energy shift between years.
+•	Objective is to eliminate unserved energy as much as possible while using surplus of low-cost generation
+    a.	Storage is charged when there's a surplus of energy from VRE sources (i.e. only curtailed VRE sources generation is stored);
+    b.	Storage is discharged when there's unserved energy in the system;
+    c.	Losses in storage may be taken into account;
+•	When there is a surplus of energy in the system, storage is charged:
+    a.	Surplus of energy exists in the case cumulative generation of must run units (not implemented in the software) and VRE sources with low variable cost (i.e. hydro, wind, solar) in 
+        an hour is higher than total demand of that hour (total demand is domestic demand plus export). Here it is important to monitor curtailment of these generation categories and store surplus energy, if any.
+    b.	For charging energy storage, simulation takes into account
+        i.	Volume of energy stored at the end of the previous hour (also taking into account losses or energy leakages) – is there a free volume in storage?;
+        ii.	Rate or capacity at which storage can be charged (i.e. not more than free storage available, not more than maximum charging rate or capacity, not more than energy surplus available)
+        iii.	State of storage at the end of the current hour (i.e. not possible to overcharge it)
+    c.	After storage is charged during an hour, it should be checked if there is still some curtailment done (so that in can be reported)
+•	Storage can be used during hours where there is a need (i.e. unserved energy)
+    a.	For discharging energy storage, simulation takes into account
+        i.	Volume of energy stored at the end of the previous hour – is there energy in storage?
+        ii.	Rate at which storage can be charged
+•	State of energy in storage should be updated every hour, irrespective if storage is charged or discharged, to take into account potential leakages of energy.
+ 
+Figure 1. Basic simulation steps for storage operation
+For a simpler presentation, formulas below omit index y for year.
+VSVOL(0) = 0, storage at the beginning of year year (or sub-period) is empty
+VSVOL(h) = VSVOL(h-1) * (1 – PS_LOSS/87.60) + VS_CD(h) *1h
+Where:
+-	0 < VSVOL(h) < PSVOL_MAX
+    o	Volume stored is positive and cannot be larger than maximum storage volume
+-	0 < VS_CD(h) < PSCD_MAX and VS_CD(h) < PNS(h)
+    o	Charge/discharge power is limited and cannot be above unserved power in the system
+-	PNS(h) – unserved power in hour h
+-	VS_CD(h) = VS_CHARGE (h) * PS_EFF, for storage charge
+    o	Amount of energy taken from the system is VS_CHARGE (h)
+    o	Amount of energy put into storage is VS_CHARGE (h) * PS_EFF
+    o	VS_CHARGE(h) is positive and cannot be higher than surplus available
+-	VS_CD(h) =  – VS_DISCHARGE (h), for storage discharge
+    o	Amount of energy taken from storage is VS_DISCHARGE (h)
+    o	Amount of energy given to the system is VS_DISCHARGE (h) * PS_EFF
+</pre>

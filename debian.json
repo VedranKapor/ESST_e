@@ -1,0 +1,13 @@
+{
+    "dest": "release-builds/",
+    "icon": "project/css/favicon-bar-chart-o.ico",
+    "categories": [
+      "Utility"
+    ],
+    "depends": [
+      "php", "libgconf-2-4", "php-xml"
+    ],
+    "lintianOverrides": [
+      "changelog-file-missing-in-native-package"
+    ]
+  }

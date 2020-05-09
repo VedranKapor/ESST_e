@@ -27,6 +27,6 @@ function getInstallerConfig () {
     //iconUrl:  path.join(rootPath, 'project', 'css', 'esst.ico' ),
     iconUrl: "https://github.com/VedranKapor/ESST_e/blob/master/project/css/esst.ico",
     remoteReleases: 'https://github.com/VedranKapor/ESST_e.git',
-    remoteToken: ca44137151d356d42d1626ec992f4c2a936b7aac
+    remoteToken: 'ca44137151d356d42d1626ec992f4c2a936b7aac'
   })
 }

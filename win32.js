@@ -24,7 +24,8 @@ function getInstallerConfig () {
     //iconUrl:  "https://raw.githubusercontent.com/andrii-iaea/NEST/master/Theme/favicon.ico?token=AhmTzVatpFcPJVQ-B5qff8S55OuCT8iIks5cs4pxwA%3D%3D",
     //iconUrl: "https://raw.githubusercontent.com/andrii-iaea/ESST/master/css/favicon-bar-chart-o.ico?token=AhmTzaUd5HsPO3swqy2-GSwweBs-NzEQks5cfp0lwA%3D%3D",
     setupIcon: path.join(rootPath, 'project', 'css', 'favicon.ico' ),
-    iconUrl:  path.join(rootPath, 'project', 'css', 'esst.ico' ),
+    //iconUrl:  path.join(rootPath, 'project', 'css', 'esst.ico' ),
+    iconUrl: "https://github.com/VedranKapor/ESST_e/blob/master/project/css/esst.ico",
     remoteReleases: 'https://github.com/VedranKapor/ESST_e.git',
     remoteToken: 'ca44137151d356d42d1626ec992f4c2a936b7aac'
   })

@@ -31,7 +31,7 @@
     "electron-winstaller": "^4.0.0",
     "gulp-connect-php": "^1.0.3",
     "gulp-util": "^3.0.8",
-    "jquery": "^3.3.1"
+    "jquery": "^3.5.0"
   },
   "dependencies": {}
 }

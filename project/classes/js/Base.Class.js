@@ -269,7 +269,7 @@ function getColYr_display_onlyDecimal( years, unit) {
     window.decimal = 'd' + d;
 
     let aggregatesrenderer = function(aggregates, column, element, summaryData) { 
-        console.log('sum ', aggregates['sum'])
+        //console.log('sum ', aggregates['sum'])
         // let agregat = parseFloat(aggregates['sum'].replace(/,/g, ''), 5);
         //console.log('agregat ', agregat)
         let result =  aggregates['sum'];
@@ -625,7 +625,7 @@ function getYearsEditableColumns2(years) {
                         initeditor: initeditor,
                         validation: function (cell, value) {
                                 var ie = $('#jqxgrid_trans').jqxGrid('getcellvalue', cell.row, "name");
-                                console.log('negative')
+                                //console.log('negative')
                                 if (value < 0 && ie != 'Import/Export') {
                                     return { result: false, message: value_should_be_positive };
                                 }

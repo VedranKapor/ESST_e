@@ -1962,9 +1962,16 @@ function getCO2(user, casename, techs) {
 
         complete: function(e) {
             var serverResponce = e.responseJSON;
-            //console.log(serverResponce);
-            let columns = [];
             
+            let columns = [];
+            let datafield = [];
+          //  datafield.push( {name: "Tech", type: "string"});
+            Object.keys(serverResponce).forEach(function(year) {
+                //console.log(year);
+                datafield.push( {name: year, type: "string"});
+            });
+           // console.log(datafield)
+
             function getSource(){
                 return  {
                     localdata: serverResponce,
@@ -1972,6 +1979,7 @@ function getCO2(user, casename, techs) {
                     //root: root,
                     async: true, 
                     cache: false,
+                    datafields:  datafield
                 };  
             }
             let source = getSource();
@@ -1993,9 +2001,9 @@ function getCO2(user, casename, techs) {
                                     if(year != 'uid'){
                                         if (years.indexOf(year) == -1 && year != 'uid') {
                                             years.push(year);
-                                            columns.push({ 'text': year, 'datafield': year, 'cellsalign':'right',  'cellsformat': 'd2', 'cellclassname': cellclass, 'aggregates': ['sum', 'avg'] });
+                                            columns.push({ 'text': year, 'datafield': year, 'cellsalign':'right',  'cellsformat': 'd2', 'cellclassname': cellclass, 'aggregates': ['sum'] });
                                         }
-                                        //console.log(tech, year);
+                                        //console.log(tech, year, type);
                                         tmp[year] = dataSet[year][tech][type];
                                     }  
                                 }
@@ -2329,7 +2337,7 @@ function getSTG(casename,user, currency){
             "CAP":{unit: 'MW',  desc: "Charging/discharging capacity [Power]"},
             "LOS":{unit: '%/year', desc: "Storage losses"},
             "Eff":{unit: '%', desc: "Efficiency of charge/discharge"},
-            "FCo":{unit: currency+'/GWh/year', desc: "Fixed Cost"},
+            "FCo":{unit: currency+'/MWh/year', desc: "Fixed Cost"},
         };
         let  years = Object.keys(DATA);
 

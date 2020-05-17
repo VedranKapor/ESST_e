@@ -9,7 +9,6 @@ var path = require("path");
 
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 
-
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
   return;
@@ -32,7 +31,7 @@ if(platform == "darwin") {
   phpPath = path.resolve(__dirname) + "/php"+"/mac"+"/php";
 }
 
-console.log(path.resolve(__dirname));
+//console.log(path.resolve(__dirname));
 
 php.server({
     port: 8088,
@@ -83,7 +82,7 @@ app.on('ready', function() {
   // and load the app's front controller. Feel free to change with app_dev.php
   //mainWindow.setFullScreen(true); 
   mainWindow.loadURL("http://127.0.0.1:8088/index.html");
-  //mainWindow.webContents.openDevTools()
+  //gimainWindow.webContents.openDevTools()
 
   // Uncomment to open the DevTools.
   //mainWindow.webContents.openDevTools();

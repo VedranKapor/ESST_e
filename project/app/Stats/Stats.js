@@ -324,8 +324,20 @@ $(document).ready(function () {
                 $("#pngHG"+type).click(function() {
                     $("#chartHG"+type).jqxChart('saveAsPNG', 'Electricity generation.png',  getExportServer());
                 }); 
+                // $("#rcHG"+type).click(function () {
+                //     $('#gridHG'+type).jqxGrid('autoresizecolumns');
+                // });
+                let resHG = {};
+                resHG[type] = true;
                 $("#rcHG"+type).click(function () {
-                    $('#gridHG'+type).jqxGrid('autoresizecolumns');
+                    console.log(resHG[type]);
+                    if(resHG[type]){
+                        $('#gridHG'+type).jqxGrid('autoresizecolumn', 'name');
+                    }
+                    else{
+                        $('#gridHG'+type).jqxGrid('autoresizecolumns');
+                    }
+                    resHG[type] = !resHG[type];        
                 });
                 ////////////////////////////////////////EVENTS CG
                 $("#xlsCG"+type).click(function (e) {
@@ -335,8 +347,20 @@ $(document).ready(function () {
                 $("#pngCG"+type).click(function() {
                     $("#chartCG"+type).jqxChart('saveAsPNG', 'Electricity curtailment/underutilization.png',  getExportServer());
                 }); 
+                // $("#rcCG"+type).click(function () {
+                //     $('#gridCG'+type).jqxGrid('autoresizecolumns');
+                // });
+                let resCG = {};
+                resCG[type] = true;
                 $("#rcCG"+type).click(function () {
-                    $('#gridCG'+type).jqxGrid('autoresizecolumns');
+                    console.log(resHG[type]);
+                    if(resCG[type]){
+                        $('#gridCG'+type).jqxGrid('autoresizecolumn', 'name');
+                    }
+                    else{
+                        $('#gridCG'+type).jqxGrid('autoresizecolumns');
+                    }
+                    resCG[type] = !resCG[type];        
                 });
                 ////////////////////////////////////////EVENTS
                 $("#xlsUD"+type).click(function (e) {
@@ -347,8 +371,20 @@ $(document).ready(function () {
                     $("#chartCG"+type).jqxChart('saveAsPNG', 'Unserved demand.png',  getExportServer());
                 }); 
 
+                // $("#rcUD"+type).click(function () {
+                //     $('#gridUD'+type).jqxGrid('autoresizecolumns');
+                // });
+                let resUD = {};
+                resUD[type] = true;
                 $("#rcUD"+type).click(function () {
-                    $('#gridUD'+type).jqxGrid('autoresizecolumns');
+                    console.log(resHG[type]);
+                    if(resUD[type]){
+                        $('#gridUD'+type).jqxGrid('autoresizecolumn', 'name');
+                    }
+                    else{
+                        $('#gridUD'+type).jqxGrid('autoresizecolumns');
+                    }
+                    resUD[type] = !resUD[type];        
                 });
 
                 let resIC = true;
@@ -672,6 +708,7 @@ $(document).ready(function () {
             /////////////////////////////////////////////////////////////////////////////PAGE EVENTS////////////////////////////////////////////////////////////////////////////
             $(".showLogY").click(function (e) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 $('#logY').html(`
                     <div class='bs-callout bs-callout-primary' style="margin:10px 0px 10px 0px">
                         <h4>${DEF.Y.title}</h4>
@@ -711,13 +748,16 @@ $(document).ready(function () {
             ///////////////////////////////////////////////////////EVENTS 
             $(".toggleLabels").on('click', function (e) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
                 var chartId = $(this).attr('id-chart');
+                console.log(chartId);
                 chart[chartId].seriesGroups[0].labels.visible = !chart[chartId].seriesGroups[0].labels.visible;
                 chart[chartId].update();    
             });
     
             $(".switchChart").on('click', function (e) {
                 e.preventDefault();
+                e.stopImmediatePropagation();
     
                 var chartType = $(this).attr('data-chartType');
                 var chartId = $(this).attr('id-chart');

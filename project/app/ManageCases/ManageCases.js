@@ -61,7 +61,7 @@ $(document).ready(function () {
 
     $('#jqxFileUpload').on('uploadStart', function (event) {
         var fileName = event.args.file;
-        //console.log(fileName);
+        console.log(fileName);
     }); 
 
     $('#jqxFileUpload').jqxFileUpload({ width: 300, uploadUrl: "app/ManageCases/ManageCases.php", fileInputName: 'fileToUpload' });
@@ -69,7 +69,9 @@ $(document).ready(function () {
     $('#jqxFileUpload').on('uploadEnd', function (event) {
         var args = event.args;
         var fileName = args.file;
+        console.log(args.response);
         var serverResponce = JSON.parse(args.response);
+        
         switch (serverResponce["type"]) {
             case 'ERROR':
                 $('#messageup').text(serverResponce["msg"]);

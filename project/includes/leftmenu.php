@@ -535,7 +535,7 @@ else{
             </a>
             <b class="arrow"></b>
         </li> -->
-        <!-- <li class="hLight" id="Stats">
+        <li class="hLight" id="Stats">
             <a href="#/Stats">
                 <i class=" menu-icon fa fa-database"></i>
                 <span class="menu-text" lang='en'>
@@ -544,7 +544,7 @@ else{
                
             </a>
             <b class="arrow"></b>
-        </li> -->
+        </li>
         <li class="hLight">
             <a href="#/Docs">
                 <i class=" menu-icon fa fa-file-text-o"></i>

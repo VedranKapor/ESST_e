@@ -5,6 +5,10 @@ International Atomic Energy Agency IAEA,
 May 2020.
 
 ==============================================================================================================================
+GitHub repository
+https://github.com/VedranKapor/ESST_e
+
+==============================================================================================================================
 
 ESST (Energy Scenarios Simulation Tool) is a simple analytical tool to prepare quick assessment of future power capacity needs 
 and investment costs, as well as the basic environmental impact (i.e. air emissions).
@@ -16,6 +20,8 @@ Key characteristics
 •	Multilingual
 •	User friendly interface, dynamic visualization 
 •	In compliance with IRES recommendations
+
+===============================================================================================================================
 IT requirements
 •	Cross browser
 •	Cross platform

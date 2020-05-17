@@ -1,38 +1,30 @@
-Electron Symfony
-================
+Energy Scenarios Simulation Tool, Version 2.7.0,
+Planning & Economic Studies Section,
+Department of Nuclear Energy,
+International Atomic Energy Agency IAEA,
+May 2020.
 
-This simple project allows to run a Symfony application inside Electron.
-It's simply a default Electron build (see https://github.com/electron/electron-quick-start)
-with gulp-connect-php, needed to run PHP.
-Indeed, you can use this to run any PHP application, not just a Symfony one.
+==============================================================================================================================
 
-You need npm installed on your machine to get this working.
-
-Installation
-------------
-
-* clone this repository
-* run `npm install`
-* put your Symfony project under `project` directory. If you prefer a different name, just edit `main.js` accordingly
-* for portability, you should put a php static installation under `php` directory. If want to just give a try,
-  you could use your already system-wide installed PHP. In this case, edit `main.js` and point the PHP path
-  to your actual path (in the `bin` option of `php.server()`). E.g., for Ubuntu the path is `usr/bin/php`
-* for portability, you should use a sqlite database. If you want to just give a try, you can use a "classic" database
-  (like MySql)
-* if your Symfony project is using assets from a CDN, you must copy such assets in your local folders, since
-  CDN assets are not working inside electron.
-  For example, if you're using something like `//code.jquery.com/jquery-2.2.3.js`, you need to
-  downalod `jquery-2.2.3.js` file and put it under `web/js` directory, then adjust your templates accordingly.
-* Also, if you use jquery, take a look to [this issue](http://stackoverflow.com/a/37480521/369194)
-
-Execution
----------
-
-Run `npm start`
-
-The following screenshot shows an example of Symfony Standard Edition running with DevTools open:
-
-![screenshot](https://cloud.githubusercontent.com/assets/179866/15629379/f3c89fca-2517-11e6-9455-9ba87abeba54.png)
-
-If you want to use DevTools, uncomment the relevant line in `main.js`
-
+ESST (Energy Scenarios Simulation Tool) is a simple analytical tool to prepare quick assessment of future power capacity needs 
+and investment costs, as well as the basic environmental impact (i.e. air emissions).
+Key characteristics
+•	Scenario-based modelling software for energy capacity expansion, GHG mitigation and investment assessment
+•	Simple, flexible, easy to use – intuitive
+•	Low data requirement
+•	Medium to long-term time frame
+•	Multilingual
+•	User friendly interface, dynamic visualization 
+•	In compliance with IRES recommendations
+IT requirements
+•	Cross browser
+•	Cross platform
+•	Standalone
+•	Web/cloud available
+•	In compliance with W3C standard
+Technologies used
+•	XML, JSON file as data storage
+•	PHP ver 7 as server side language (calculations)
+•	Javascript, jquery, jqx widgets, html5,css3 for rich user experience
+•	electron, electron-installer-dmg, electron-packager, electron-winstaller for packing and distributin standalone version
+•	Deployment on Azure Cloud https://esst.azurewebsites.net/ on portal http://energy-modelling.azurewebsites.net/

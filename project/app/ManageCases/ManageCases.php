@@ -117,6 +117,8 @@ if (isset($_POST['action'])){
 }
 if(isset($_FILES) && !empty($_FILES)){
 	try{
+		// print(USER_CASE_PATH);
+		// print_r($_FILES);
 	    $upload = new Upload('fileToUpload', 'ZIP', USER_CASE_PATH,'esstRestore' );
 	    $msg = $upload->uploaded();	
 		echo json_encode(array('msg'=>"Upload success!", "type"=>"SUCCESS"));

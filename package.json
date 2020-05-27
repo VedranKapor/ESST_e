@@ -1,6 +1,6 @@
 {
   "name": "esst",
-  "version": "2.6.5",
+  "version": "2.7.0",
   "description": "ESST Energy Scenario Simulation Tool",
   "main": "main.js",
   "scripts": {

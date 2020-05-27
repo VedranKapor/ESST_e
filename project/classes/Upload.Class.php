@@ -84,7 +84,6 @@ class Upload {
 
 
             $finfo = new finfo(FILEINFO_MIME_TYPE);
-            
             if (false === $ext = array_search($finfo->file($_FILES[$this->fieldname]['tmp_name']), $TYPE, true)){
                 throw new RuntimeException(Upload::$INVALIDFORMAT_ERROR);
             }

@@ -22,7 +22,8 @@ let phpPath;
 
 if(platform == "win32") {
   //phpPath = path.resolve(__dirname) + "/php"+"/bin"+"/php";
-  phpPath = path.resolve(__dirname) + "/php"+"/bin"+"/php-7.4.5-nts-Win32-vc15-x64"+"/php";;
+  // phpPath = path.resolve(__dirname) + "/php"+"/bin"+"/php-7.4.6-nts-Win32-vc15-x64"+"/php";
+  phpPath = path.resolve(__dirname) + "/php/bin/php7.4.0/php";
 }
 if(platform == "linux") {
   phpPath = path.resolve(__dirname) + "/php"+"/bin"+"/ubuntu"+"/php";
@@ -82,7 +83,7 @@ app.on('ready', function() {
   // and load the app's front controller. Feel free to change with app_dev.php
   //mainWindow.setFullScreen(true); 
   mainWindow.loadURL("http://127.0.0.1:8088/index.html");
-  //gimainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Uncomment to open the DevTools.
   //mainWindow.webContents.openDevTools();
